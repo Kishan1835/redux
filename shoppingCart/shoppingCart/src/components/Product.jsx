@@ -1,37 +1,67 @@
 import PropTypes from 'prop-types';
-const Product = ({ post }) => {
+import { useSelector, useDispatch } from 'react-router'
+import { remove, add } from '../redux/Slice/CartSlice';
+import { toast } from 'react-toastify';
+
+
+const Product = ({ item }) => {
+
     Product.propTypes = {
-        post: PropTypes.shape({
+        item: PropTypes.shape({
             title: PropTypes.string.isRequired,
             description: PropTypes.string.isRequired,
             price: PropTypes.string.isRequired,
-            image: PropTypes.string.isRequired, // Add this line
+            image: PropTypes.string.isRequired,
+            id: PropTypes.string.isRequired,
+
         }).isRequired,
     };
+
+    const { cart } = useSelector((state) => state)
+    const dispatch = useDispatch();
+
+    const AddToCart = () => {
+        dispatch(add(item));
+        toast.success("Item added To Cart")
+    }
+
+    const removeFromCart = () => {
+        dispatch(remove(item.id));
+        toast.success("Removed From Cart")
+    }
+
+
 
     return (
         <div>
             <div>
-                <p>{post.title}</p>
+                <p>{item.title}</p>
             </div>
 
             <div>
-                <p>{post.description}</p>
+                <p>{item.description}</p>
             </div>
 
             <div>
-                <img src={post.image} alt="" />
+                <img src={item.image} alt="" />
             </div>
 
             <div>
-                <p>{post.price}</p>
+                <p>{item.price}</p>
             </div>
 
-            <button>
-                {
-                    true ? <p>Remove Item</p> : <p>Add to Cart</p>
-                }
-            </button>
+            {
+                cart.some((p) => p.id == item.id) ?
+                    (<button
+                        onClick={removeFromCart}>
+                        Remove Item
+                    </button>) :
+                    (<button
+                        onClick={AddToCart}>
+                        Add to Cart
+                    </button>)
+            }
+
         </div>
     );
 };
