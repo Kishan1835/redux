@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import  Spinner  from '../Components/Spinner'
+import Spinner from '../Components/Spinner'
 import Product from '../Components/Product'
 
 const Home = () => {
@@ -34,7 +34,7 @@ const Home = () => {
                 loading ? <Spinner /> :
                     posts.length > 0 ?
                         (
-                            <div>
+                            <div className="grid xs:grid-col-1 sm:grid-col-2 md:grid-col-3 lg:grid-cols-4 max-w-6xl p-2 mx-auto space-y-10 space-x-5 min-h-[80vh]">
                                 {
                                     posts.map((post) => {
                                         return <Product key={post.id} post={post} />;
@@ -42,12 +42,12 @@ const Home = () => {
                                 }
                             </div>
                         ) :
-                        <div>
+                        <div className="flex justify-center items-center">
                             <p>No Data Found</p>
                         </div>
             }
-       </div>
-   )
+        </div>
+    )
 };
 
 export default Home;

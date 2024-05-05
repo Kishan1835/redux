@@ -1,29 +1,71 @@
-import React from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { add, remove } from '../redux/Slice/CartSlice';
+import toast from 'react-hot-toast';
 
-const Product = ({post}) => {
+
+const Product = ({ post }) => {
+
+    const { cart } = useSelector((state) => state)
+
+    const dispatch = useDispatch();
+
+    const addToCart = () => {
+        dispatch(add(post));
+        toast.success("Item Added To Cart")
+    }
+
+    const removeFromCart = () => {
+        dispatch(remove(post.id));
+        toast.error("Removed from Cart")
+    }
+
     return (
-        <div>
+        <div className='flex flex-col items-center justify-between hover:scale-110 transition duration-300 ease-in gap-3 p-4 mt-10 ml-5 rounded-xl outline'>
             <div>
-                <p>{post.title}</p>
+                <p className='text-gray-700 font-semibold text-lg lext-left truncat w-40 mt-1'>{post.title && post.title.split(" ").slice(0, 4).join(" ") + "..."}</p>
             </div>
 
             <div>
-                <p>{post.description}</p>
+                <p className='w-40 text-gray-400 font-normal
+                text-[15px] text-left '>{post.description && post.description.split(" ").slice(0, 10).join(" ") + "..."}</p>
             </div>
 
-            <div>
-                <img src={post.image} alt="" />
+            <div className='h-[180px]'>
+                <img src={post.image} alt="" className='h-full w-full' />
             </div>
 
-            <div>
-                <p>{post.price}</p>
-            </div>
 
-            <button>
+            <div className='flex justify-between gap-11 items-center w-full  mt-5'>
+                <div>
+                    <p className='text-green-600 font-semibold '>${post.price}</p>
+                </div>
+
                 {
-                    true ? <p>Remove Item</p> : <p>Add to Cart</p>
+                    cart.some((p) => p.id === post.id) ?
+                        (
+                            <button
+                                className='text-gray-700 border-2 boreder-gray-700 rounded-full font-semibold
+                                text-[12px] p-1 px-2 uppercase
+                                hover:bg-gray-700 hover:text-white
+                                transition duration-300 ease-in'
+                                onClick={removeFromCart}>
+                                Remove Item
+                            </button>
+                        ) :
+                        (
+                            <button
+                                className='text-gray-700 border-2 boreder-gray-700 rounded-full font-semibold
+                                text-[12px] p-1 px-2 uppercase
+                                hover:bg-gray-700 hover:text-white
+                                transition duration-300 ease-in'
+                                onClick={addToCart}>
+                                Add to Cart
+                            </button>
+                        )
                 }
-            </button>
+
+            </div>
+
         </div>
     )
 }
